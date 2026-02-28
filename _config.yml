@@ -1,0 +1,17 @@
+title: Infographics Assignment
+description: A visual exploration of data through infographics
+baseurl: "/Infographics-Assignment"
+url: ""
+
+markdown: kramdown
+permalink: pretty
+
+navigation:
+  - title: Home
+    url: /
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - README.md
+  - vendor
