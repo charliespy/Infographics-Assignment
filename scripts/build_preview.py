@@ -95,8 +95,18 @@ def build_preview():
         layout,
     )
 
-    # CSS and links
-    layout = layout.replace("{{ '/assets/css/style.css' | relative_url }}", ASSET_PREFIX + "assets/css/style.css")
+    # CSS: rewrite so preview gets ../assets/css/style.css (deployed uses site.baseurl in layout)
+    css_href = "href=\"" + ASSET_PREFIX + "assets/css/style.css\""
+    layout = re.sub(
+        r'href="\{\{\s*[\'"]?/assets/css/style\.css[\'"]?\s*\|\s*relative_url\s*\}\}"',
+        css_href,
+        layout,
+    )
+    layout = re.sub(
+        r'href="\{\{\s*site\.baseurl\s*\}\}/assets/css/style\.css"',
+        css_href,
+        layout,
+    )
     layout = layout.replace("{{ '/' | relative_url }}", relative_url("/"))
 
     # Nav links: replace the whole <ul>...</ul> block
