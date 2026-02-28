@@ -6,10 +6,6 @@ url: ""
 markdown: kramdown
 permalink: pretty
 
-navigation:
-  - title: Home
-    url: /
-
 exclude:
   - Gemfile
   - Gemfile.lock

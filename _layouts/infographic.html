@@ -1,0 +1,67 @@
+---
+layout: default
+---
+<article class="infographic container">
+  <header class="infographic-header">
+    <h1 class="infographic-title">{{ page.title }}</h1>
+    {% if page.subtitle %}<p class="infographic-subtitle">{{ page.subtitle }}</p>{% endif %}
+  </header>
+
+  {% if page.introduction %}
+  <section class="infographic-intro" id="introduction">
+    <h2 class="section-label">Introduction</h2>
+    <div class="section-body">
+      {{ page.introduction | markdownify }}
+    </div>
+  </section>
+  {% endif %}
+
+  {% if page.historical_context %}
+  <section class="infographic-context" id="historical-context">
+    <h2 class="section-label">Historical Context</h2>
+    <div class="section-body">
+      {{ page.historical_context | markdownify }}
+    </div>
+  </section>
+  {% endif %}
+
+  {% if page.sections %}
+  {% for sec in page.sections %}
+  <section class="infographic-section" id="section-{{ forloop.index }}">
+    <h2 class="section-label">{{ sec.title }}</h2>
+    <div class="section-body">
+      {{ sec.content | markdownify }}
+    </div>
+  </section>
+  {% endfor %}
+  {% endif %}
+
+  {% if page.conclusion %}
+  <section class="infographic-conclusion" id="conclusion">
+    <h2 class="section-label">Conclusion</h2>
+    <div class="section-body">
+      {{ page.conclusion | markdownify }}
+    </div>
+  </section>
+  {% endif %}
+
+  {% if page.references %}
+  <section class="infographic-references" id="references">
+    <h2 class="section-label">References</h2>
+    <div class="section-body references-body">
+      {{ page.references | markdownify }}
+    </div>
+  </section>
+  {% endif %}
+
+  {% if page.description %}
+  <section class="infographic-description" id="description">
+    <h2 class="section-label">Description</h2>
+    <div class="section-body">
+      {{ page.description | markdownify }}
+    </div>
+  </section>
+  {% endif %}
+
+  {{ content }}
+</article>
