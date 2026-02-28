@@ -11,7 +11,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 CONFIG = ROOT / "_config.yml"
-DEFAULT_LAYOUT = ROOT / "_layouts" / "default.html"
+DEFAULT_LAYOUT = ROOT / "_layouts" / "single.html"
 INDEX = ROOT / "index.html"
 PREVIEW_DIR = ROOT / "preview"
 PREVIEW_INDEX = PREVIEW_DIR / "index.html"
@@ -63,19 +63,21 @@ def build_preview():
     index_raw = INDEX.read_text(encoding="utf-8")
     content = strip_front_matter(index_raw)
 
+    # Resolve image paths in content before injecting ({{ '/assets/images/...' | relative_url }} -> ../assets/images/...)
+    def replace_image_path(match):
+        return ASSET_PREFIX + "assets/images/" + match.group(1)
+    content = re.sub(
+        r"\{\{\s*'/assets/images/([^']+)'\s*\|\s*relative_url\s*\}\}",
+        replace_image_path,
+        content,
+    )
+
     # Page context for home
     page = {"title": "Home", "url": "/"}
     year = time.strftime("%Y")
 
     # Replace {{ content }}
     layout = layout.replace("{{ content }}", content)
-
-    # Resolve image paths for preview ({{ '/assets/images/...' | relative_url }} -> ../assets/images/...)
-    layout = re.sub(
-        r"\{\{\s*'/assets/images/([^']+)'\s*\|\s*relative_url\s*\}\}",
-        ASSET_PREFIX + "assets/images/\\1",
-        layout,
-    )
 
     # Title tag
     layout = re.sub(
@@ -121,7 +123,7 @@ def build_preview():
 
 def watch():
     """Watch source files and rebuild on change."""
-    watched = [CONFIG, DEFAULT_LAYOUT, INDEX, ROOT / "assets" / "css" / "style.css"]
+    watched = [CONFIG, DEFAULT_LAYOUT, INDEX, ROOT / "assets" / "css" / "style.css", ROOT / "_layouts" / "single.html"]
     last_mtimes = {f: os.path.getmtime(f) for f in watched if f.exists()}
     print("Watching for changes (Ctrl+C to stop)...")
     while True:
